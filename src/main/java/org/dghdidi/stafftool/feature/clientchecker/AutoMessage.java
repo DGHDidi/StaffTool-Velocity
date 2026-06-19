@@ -62,8 +62,8 @@ public class AutoMessage implements SimpleCommand {
                 InfoBook.del(player);
                 return;
             }
-            sendMessage(staff, "§a§l已向玩家 §e§l" + targetID + "§a§l 发送查端信息§7(" + counter + "/20)!");
-            sendMessage(player, playerPrefix + "§f您的游戏行为被 §c§l检测异常§f，为创造良好的游戏环境，需要对您的客户端进行检查，请您§e在五分钟内§f添加工作人员QQ: §b" + qq + "，§e§l无视或退出服务器§f将会被视为作弊§c§l封禁§f，感谢您的理解和配合");
+            sendMessage(staff, "§a§l已向玩家 §e§l" + targetID + "§a§l 发送查端信息 §7(" + counter + "/20)!");
+            sendCheckNotice(player, qq);
             sendTitle(player, "§e请在五分钟内添加QQ§b§l" + qq, 10, 250, 10);
             counter++;
             try {
@@ -89,6 +89,15 @@ public class AutoMessage implements SimpleCommand {
                 legacy(subTitle),
                 Title.Times.times(ticks(fadeIn), ticks(stay), ticks(fadeOut))
         ));
+    }
+
+    public void sendCheckNotice(Player player, String qq) {
+        sendMessage(player, "§8§m----------------§r §c§l查端通知 §8§m----------------");
+        sendMessage(player, playerPrefix + "§f您的游戏行为被 §c§l检测异常§f，需要进行客户端检查。");
+        sendMessage(player, "§e请在 §c§l五分钟内 §e添加工作人员 QQ: §b§l" + qq);
+        sendMessage(player, "§e§l无视通知 §f或 §e§l退出服务器 §f将会被视为作弊并 §c§l封禁§f。");
+        sendMessage(player, "§7感谢您的理解和配合，请尽快联系工作人员。");
+        sendMessage(player, "§8§m----------------------------------------");
     }
 
     private Duration ticks(int ticks) {
