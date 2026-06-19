@@ -64,7 +64,7 @@ public class LoadConfig {
         StaffCMD.delay = TeleportUtil.teleportDelayMs;
         PlayerCMD.reportPlayerPrefix = string(config, "Style", "reportPlayerPrefix", "§8[§6举报系统§8] §f");
         StaffCMD.reportStaffPrefix = string(config, "Style", "reportStaffPrefix", "§b[员工] §2[举报] §f");
-        AutoMessage.playerPrefix = string(config, "Style", "playerPrefix", "§cInf Staff §8> §f");
+        AutoMessage.playerPrefix = string(config, "Style", "playerPrefix", "§cInf Staff §8» §f");
         AdminChat.adminPrefix = string(config, "Style", "adminPrefix", "§c[管理] ");
         LoginLogoutListener.staffPrefix = string(config, "Style", "staffPrefix", "§b[员工] ");
 

@@ -52,7 +52,7 @@ public final class StaffTool {
         try {
             luckPerms = LuckPermsProvider.get();
         } catch (IllegalStateException e) {
-            logger.warning("§c§l无法获取 LuckPerms API，请确认 Velocity 已安装 LuckPerms。");
+            logger.warning("§c§l无法获取 LuckPerms API,请确认 Velocity 已安装 LuckPerms。");
         }
 
         proxy.getEventManager().register(this, new LoginLogoutListener());

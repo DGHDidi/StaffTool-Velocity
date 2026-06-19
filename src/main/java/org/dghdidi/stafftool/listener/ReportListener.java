@@ -3,7 +3,10 @@ package org.dghdidi.stafftool.listener;
 import com.velocitypowered.api.event.Subscribe;
 import com.velocitypowered.api.event.player.ServerConnectedEvent;
 import com.velocitypowered.api.proxy.Player;
+import org.dghdidi.stafftool.StaffTool;
 import org.dghdidi.stafftool.feature.reports.ReportsStorage;
+
+import java.util.concurrent.TimeUnit;
 
 import static org.dghdidi.stafftool.config.LoadConfig.enableReports;
 import static org.dghdidi.stafftool.feature.reports.StaffCMD.reportStaffPrefix;
@@ -22,6 +25,9 @@ public class ReportListener {
             return;
         }
 
-        sendMessage(player, reportStaffPrefix + "§a当前有 §e" + unacceptedNum + " §a个未受理举报，输入 §b/reports §a查看详情.");
+        StaffTool.proxy.getScheduler().buildTask(StaffTool.plugin, () ->
+                        sendMessage(player, reportStaffPrefix + "§a当前有 §e" + unacceptedNum + " 条未处理的举报, 使用 §b/reports §a查看"))
+                        .delay(1, TimeUnit.SECONDS)
+                        .schedule();
     }
 }

@@ -14,7 +14,7 @@ Style:
   adminPrefix: "§c[管理] "
   reportStaffPrefix: "§b[员工] §2[举报] §f"
   reportPlayerPrefix: "§8[§6举报系统§8] §f"
-  playerPrefix: "§cInf Staff §8> §f"
+  playerPrefix: "§cInf Staff §8» §f"
   teleportDelay(ms): 2000
   teleportCommand: "tp %target%"
 

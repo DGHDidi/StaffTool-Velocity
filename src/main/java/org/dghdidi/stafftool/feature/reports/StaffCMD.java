@@ -101,7 +101,7 @@ public class StaffCMD implements SimpleCommand {
                 statement.setInt(2, index);
                 statement.executeUpdate();
             }
-            staffBC("§7" + getDisplayName(sender) + " §e受理了举报§7#" + index);
+            staffBC("§7" + getDisplayName(sender) + " §e受理了举报 §7#" + index);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -127,7 +127,7 @@ public class StaffCMD implements SimpleCommand {
                 return;
             }
             del(index, playerName, reportedName);
-            staffBC("§7" + getDisplayName(sender) + " §a处理了举报§7#" + index);
+            staffBC("§7" + getDisplayName(sender) + " §a处理了举报 §7#" + index);
             StaffTool.proxy.getPlayer(playerName).ifPresent(player ->
                     sendMessage(player, reportPlayerPrefix + "§a§l您的举报已被工作人员完成处理，感谢您对游戏环境的维护!"));
         } catch (SQLException e) {
@@ -150,7 +150,7 @@ public class StaffCMD implements SimpleCommand {
                 return;
             }
             del(index, result.get(0), result.get(1));
-            staffBC("§7" + getDisplayName(sender) + " §c删除了举报§7#" + index);
+            staffBC("§7" + getDisplayName(sender) + " §c删除了举报 §7#" + index);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
