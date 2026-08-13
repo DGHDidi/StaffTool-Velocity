@@ -41,6 +41,38 @@ public class LoadConfig {
     private static boolean enableTeleport;
     private static boolean enableFindPlayer;
 
+    public static boolean isStaffChatEnabled() {
+        return enableStaffChat;
+    }
+
+    public static boolean isReportsEnabled() {
+        return enableReports;
+    }
+
+    public static boolean isChatHistoryEnabled() {
+        return enableChatHistory;
+    }
+
+    public static boolean isClientCheckerEnabled() {
+        return enableClientChecker;
+    }
+
+    public static boolean isPunishEnabled() {
+        return enablePunish;
+    }
+
+    public static boolean isOnlineStaffEnabled() {
+        return enableOnlineStaff;
+    }
+
+    public static boolean isTeleportEnabled() {
+        return enableTeleport;
+    }
+
+    public static boolean isFindPlayerEnabled() {
+        return enableFindPlayer;
+    }
+
     public static void loadConfig() throws IOException {
         Path configFile = plugin.getDataDirectory().resolve("config.yml");
         if (!Files.exists(configFile)) {

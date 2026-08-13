@@ -102,7 +102,7 @@ public class ChatHistory implements SimpleCommand {
 
     @Override
     public List<String> suggest(Invocation invocation) {
-        return invocation.arguments().length == 1 ? tabComplete(invocation.arguments()) : List.of();
+        return tabComplete(invocation.arguments());
     }
 
     @Override

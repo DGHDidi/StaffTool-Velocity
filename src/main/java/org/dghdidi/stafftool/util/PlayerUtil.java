@@ -88,10 +88,10 @@ public class PlayerUtil {
     }
 
     public static List<String> tabComplete(String[] args) {
-        if (args.length != 1) {
+        if (args.length > 1) {
             return List.of();
         }
-        String partialID = args[0].toLowerCase();
+        String partialID = args.length == 0 ? "" : args[0].toLowerCase();
         List<String> matchedIDs = new ArrayList<>();
         for (Player player : StaffTool.proxy.getAllPlayers()) {
             String id = player.getUsername();
@@ -99,6 +99,7 @@ public class PlayerUtil {
                 matchedIDs.add(id);
             }
         }
+        matchedIDs.sort(String.CASE_INSENSITIVE_ORDER);
         return matchedIDs;
     }
 
