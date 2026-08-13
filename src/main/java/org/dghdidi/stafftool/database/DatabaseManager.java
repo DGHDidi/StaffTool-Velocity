@@ -16,15 +16,14 @@ import static org.dghdidi.stafftool.config.LoadConfig.enableChatHistory;
 import static org.dghdidi.stafftool.config.LoadConfig.enableReports;
 
 public class DatabaseManager {
-    private static final String MYSQL_DRIVER_CLASS = "com.mysql.cj.jdbc.Driver";
-
     private HikariDataSource dataSource;
-    public static String mysqlHost;
-    public static int mysqlPort;
-    public static String mysqlDatabase;
-    public static String mysqlUsername;
-    public static String mysqlPassword;
-    public static String mysqlParameters;
+    public static DatabaseType type = DatabaseType.MYSQL;
+    public static String host;
+    public static int port;
+    public static String database;
+    public static String username;
+    public static String password;
+    public static String parameters;
     public static int maximumPoolSize;
     public static int minimumIdle;
     public static long connectionTimeoutMs;
@@ -32,7 +31,7 @@ public class DatabaseManager {
     public void init() {
         HikariDataSource newDataSource = createDataSource();
         try (Connection ignored = newDataSource.getConnection()) {
-            StaffTool.logger.info("§a数据库连接成功");
+            StaffTool.logger.info("§a数据库连接成功 (" + type.name().toLowerCase() + ")");
             this.dataSource = newDataSource;
             createTables();
         } catch (SQLException e) {
@@ -47,7 +46,7 @@ public class DatabaseManager {
         HikariDataSource newDataSource = createDataSource();
 
         try (Connection ignored = newDataSource.getConnection()) {
-            StaffTool.logger.info("§a数据库连接成功");
+            StaffTool.logger.info("§a数据库连接成功 (" + type.name().toLowerCase() + ")");
         } catch (SQLException e) {
             newDataSource.close();
             StaffTool.logger.warning("§c数据库连接失败，保留旧数据库连接");
@@ -63,23 +62,45 @@ public class DatabaseManager {
 
     private static HikariDataSource createDataSource() {
         try {
-            Class.forName(MYSQL_DRIVER_CLASS);
+            Class.forName(type.driverClassName());
         } catch (ClassNotFoundException e) {
-            throw new RuntimeException("MySQL JDBC driver not found in plugin jar", e);
+            throw new RuntimeException(type + " JDBC driver not found in plugin jar", e);
         }
         return new HikariDataSource(getHikariConfig());
     }
 
     private static HikariConfig getHikariConfig() {
         HikariConfig config = new HikariConfig();
-        config.setDriverClassName(MYSQL_DRIVER_CLASS);
-        config.setJdbcUrl("jdbc:mysql://" + mysqlHost + ":" + mysqlPort + "/" + mysqlDatabase + mysqlParameters);
-        config.setUsername(mysqlUsername);
-        config.setPassword(mysqlPassword);
+        config.setDriverClassName(type.driverClassName());
+        config.setJdbcUrl(jdbcUrl());
+        config.setUsername(username);
+        config.setPassword(password);
         config.setMaximumPoolSize(maximumPoolSize);
         config.setMinimumIdle(minimumIdle);
         config.setConnectionTimeout(connectionTimeoutMs);
         return config;
+    }
+
+    private static String jdbcUrl() {
+        String scheme = type == DatabaseType.POSTGRESQL ? "postgresql" : "mysql";
+        String suffix = parameters == null ? "" : parameters.trim();
+        if (!suffix.isEmpty() && !suffix.startsWith("?")) {
+            suffix = "?" + suffix;
+        }
+        return "jdbc:" + scheme + "://" + host + ":" + port + "/" + database + suffix;
+    }
+
+    public static String identityColumnDefinition() {
+        return type == DatabaseType.POSTGRESQL
+                ? "BIGSERIAL PRIMARY KEY"
+                : "BIGINT PRIMARY KEY AUTO_INCREMENT";
+    }
+
+    public static String chatLogRetentionSql(int retentionDays) {
+        if (type == DatabaseType.POSTGRESQL) {
+            return "DELETE FROM chat_log WHERE created_at < CURRENT_TIMESTAMP - INTERVAL '" + retentionDays + " days'";
+        }
+        return "DELETE FROM chat_log WHERE created_at < CURRENT_TIMESTAMP - INTERVAL " + retentionDays + " DAY";
     }
 
     public Connection getConnection() throws SQLException {
@@ -112,7 +133,7 @@ public class DatabaseManager {
              Statement statement = connection.createStatement()) {
             statement.executeUpdate(sql);
         } catch (SQLException e) {
-            if (e.getErrorCode() != 1061) {
+            if (e.getErrorCode() != 1061 && !"42P07".equals(e.getSQLState())) {
                 StaffTool.logger.severe("创建索引失败");
                 e.printStackTrace();
             }

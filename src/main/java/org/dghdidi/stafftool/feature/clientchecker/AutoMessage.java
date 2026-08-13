@@ -23,6 +23,9 @@ import static org.dghdidi.stafftool.util.PlayerUtil.tabComplete;
 
 public class AutoMessage implements SimpleCommand {
     public static String playerPrefix;
+    public static int messageCount = 20;
+    public static int intervalMs = 15000;
+    public static int titleStayTicks = 250;
 
     @Override
     public void execute(Invocation invocation) {
@@ -55,19 +58,19 @@ public class AutoMessage implements SimpleCommand {
 
     private void runTask(Player player, Player staff, String qq, String targetID) {
         int counter = 1;
-        while (counter <= 20) {
+        while (counter <= messageCount) {
             if (!player.isActive()) {
                 sendMessage(staff, "§a§l玩家§e§l" + targetID + "§c§l已经离线§7(视为拒绝查端), §a§l请执行处罚");
                 StaffTool.proxy.getCommandManager().executeAsync(staff, "punish " + targetID);
                 InfoBook.del(player);
                 return;
             }
-            sendMessage(staff, "§a§l已向玩家 §e§l" + targetID + "§a§l 发送查端信息 §7(" + counter + "/20)!");
+            sendMessage(staff, "§a§l已向玩家 §e§l" + targetID + "§a§l 发送查端信息 §7(" + counter + "/" + messageCount + ")!");
             sendCheckNotice(player, qq);
-            sendTitle(player, "§e请在五分钟内添加QQ§b§l" + qq, 10, 250, 10);
+            sendTitle(player, "§e请在五分钟内添加QQ§b§l" + qq, 10, titleStayTicks, 10);
             counter++;
             try {
-                Thread.sleep(15000);
+                Thread.sleep(intervalMs);
             } catch (InterruptedException e) {
                 StaffTool.logger.log(Level.WARNING, "§c线程等待异常§e(可能是有工作人员取消信息发送)");
                 if (InfoBook.check(player)) {

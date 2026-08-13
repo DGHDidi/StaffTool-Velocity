@@ -7,21 +7,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 import static org.dghdidi.stafftool.StaffTool.databaseManager;
+import static org.dghdidi.stafftool.config.LoadConfig.chatHistoryRetentionDays;
+import static org.dghdidi.stafftool.database.DatabaseManager.chatLogRetentionSql;
 
 public class ChatLogCleanTask implements Runnable {
     @Override
     public void run() {
         int deleted = cleanOldChatLogs();
         if (deleted >= 0) {
-            StaffTool.logger.info("§a已清理 " + deleted + " 条 7 天前的聊天记录");
+            StaffTool.logger.info("§a已清理 " + deleted + " 条 " + chatHistoryRetentionDays + " 天前的聊天记录");
         }
     }
 
     public int cleanOldChatLogs() {
-        String sql = """
-                DELETE FROM chat_log
-                WHERE created_at < NOW() - INTERVAL 7 DAY
-                """;
+        String sql = chatLogRetentionSql(chatHistoryRetentionDays);
 
         try (Connection connection = databaseManager.getConnection();
              Statement statement = connection.createStatement()) {

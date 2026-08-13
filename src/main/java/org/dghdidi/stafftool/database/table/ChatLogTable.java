@@ -3,19 +3,20 @@ package org.dghdidi.stafftool.database.table;
 import org.dghdidi.stafftool.StaffTool;
 
 import static org.dghdidi.stafftool.StaffTool.databaseManager;
+import static org.dghdidi.stafftool.database.DatabaseManager.identityColumnDefinition;
 
 public class ChatLogTable {
 
     public static void createTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS chat_log (
-                    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                    id %s,
                     player_name VARCHAR(64) NOT NULL,
                     message VARCHAR(512) NOT NULL,
                     server_name VARCHAR(64),
                     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP
                 )
-                """;
+                """.formatted(identityColumnDefinition());
         databaseManager.executeUpdate(sql);
 
         String indexSql = """

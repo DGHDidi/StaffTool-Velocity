@@ -10,20 +10,21 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static org.dghdidi.stafftool.StaffTool.databaseManager;
+import static org.dghdidi.stafftool.database.DatabaseManager.identityColumnDefinition;
 
 public class ReportsTable {
 
     public static void createTable() {
         String sql = """
                 CREATE TABLE IF NOT EXISTS report_info (
-                    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+                    id %s,
                     player_name VARCHAR(64) NOT NULL,
                     reported_name VARCHAR(64) NOT NULL,
                     staff_name VARCHAR(64),
                     server_name VARCHAR(64),
                     reason VARCHAR(128)
                 )
-                """;
+                """.formatted(identityColumnDefinition());
         databaseManager.executeUpdate(sql);
         StaffTool.logger.info("§a举报记录表已创建或已存在");
     }

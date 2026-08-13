@@ -1,24 +1,87 @@
-MySQL:
+Database:
+  # mysql 或 postgresql
+  type: "postgresql"
   host: "localhost"
-  database: "Minecraft"
-  port: 3306
-  username: "root"
-  password: "1234"
-  parameters: "?useSSL=false&characterEncoding=utf8"
+  port: 5432
+  database: "stafftool"
+  username: "stafftool"
+  password: "change_me"
+  # PostgreSQL 本地测试可用 ?sslmode=disable；MySQL 可用 ?useSSL=false&characterEncoding=utf8
+  parameters: "?sslmode=disable"
   maximumPoolSize: 10
   minimumIdle: 2
   connectionTimeout(ms): 10000
 
-Style:
-  staffPrefix: "§b[员工] "
-  adminPrefix: "§c[管理] "
-  reportStaffPrefix: "§b[员工] §2[举报] §f"
+Prefixes:
+  staffPrefix: "§bI§en§cf §bStaff §8» §f "
+  adminPrefix: "§bI§en§cf §cAdmin §8» §f "
+  reportStaffPrefix: "§bI§en§cf §bStaff §8» §f"
   reportPlayerPrefix: "§8[§6举报系统§8] §f"
   playerPrefix: "§cInf Staff §8» §f"
+
+Features:
+  staffChat: false
+  reports: true
+  chatHistory: true
+  clientChecker: true
+  punish: true
+  onlineStaff: true
+  teleport: true
+  findPlayer: true
+
+Teleport:
   teleportDelay(ms): 2000
   teleportCommand: "tp %target%"
 
-Function:
-  staffChat: true
-  reports: true
-  chatHistory: true
+ChatHistory:
+  retentionDays: 7
+
+ClientChecker:
+  messageCount: 20
+  interval(ms): 15000
+  titleStay(ticks): 250
+
+Punish:
+  # 支持 %player% 或 %target% 玩家占位符；留空可关闭历史查询
+  historyCommand: "history %player%"
+  menuTitle: "§e§l请选择你需要的处罚: §b§l%player%"
+  banLabel: "封禁类:"
+  muteLabel: "禁言类:"
+  banOptions:
+    - text: " [7D]"
+      command: "/mp ipban %player% 7d 使用第三方软件破坏游戏规则"
+      hover: "§e点击封禁7天"
+    - text: " [14D]"
+      command: "/mp ipban %player% 14d 使用第三方软件破坏游戏规则"
+      hover: "§e点击封禁14天"
+    - text: " [30D]"
+      command: "/mp ipban %player% 30d 使用第三方软件破坏游戏规则"
+      hover: "§e点击封禁30天"
+    - text: " [90D]"
+      command: "/mp ipban %player% 90d 使用第三方软件破坏游戏规则"
+      hover: "§e点击封禁90天"
+    - text: " [360D]"
+      command: "/mp ipban %player% 360d 使用第三方软件破坏游戏规则"
+      hover: "§e点击封禁360天"
+    - text: " [永久]"
+      command: "/mp ipban %player% 使用第三方软件破坏游戏规则"
+      hover: "§e点击永久封禁"
+  muteOptions:
+    - text: " [10MIN]"
+      command: "/mp ipmute %player% 10min 言辞过激或违规，请注意言行举止"
+      hover: "§e点击禁言10分钟"
+    - text: " [3H]"
+      command: "/mp ipmute %player% 3h 言辞过激或违规，请注意言行举止"
+      hover: "§e点击禁言3小时"
+    - text: " [1D]"
+      command: "/mp ipmute %player% 1d 言辞过激或违规，请注意言行举止"
+      hover: "§e点击禁言1天"
+    - text: " [3D]"
+      command: "/mp ipmute %player% 3d 言辞过激或违规，请注意言行举止"
+      hover: "§e点击禁言3天"
+    - text: " [7D]"
+      command: "/mp ipmute %player% 7d 言辞过激或违规，请注意言行举止"
+      hover: "§e点击禁言7天"
+    - text: " [30D]"
+      command: "/mp ipmute %player% 30d 言辞过激或违规，请注意言行举止"
+      hover: "§e点击禁言30天"
